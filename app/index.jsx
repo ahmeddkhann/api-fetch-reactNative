@@ -25,7 +25,34 @@ const fetchDataFromApi = async () => {
   }
 } 
 
+const fetchDataFromLocalStorage = async () => {
+  try {
+    
+    const localData = await AsyncStorage.getItem("localData");
+    return localData ? JSON.parse(localData) : []
+  } catch (error) {
+    console.log("error while fetching data from local storage: ", error);
+    return [];
+    
+  }
+}
+
 export default function Index() {
+
+  const [data, setData] = useState("");
+
+  useEffect (() => {
+    const fetchData = async () => {
+      const localData = await fetchDataFromLocalStorage();
+      setData(localData)
+    }
+    fetchData()
+  }, [])
+
+  const handleRefresh = async () => {
+    const updatedData = await fetchDataFromApi ()
+    setData (updatedData);
+  }
   return (
     <View
       style={{
