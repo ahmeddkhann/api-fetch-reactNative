@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, FlatList, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  Text,
+  View,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+  ImageBackground,
+} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import { LinearGradient } from "expo-linear-gradient";
 
 const fetchDataFromApi = async (type) => {
   try {
@@ -78,59 +86,73 @@ export default function Index() {
   );
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>My Data App</Text>
+    <ImageBackground
+      source={{ uri: "https://source.unsplash.com/random/800x800/?technology" }}
+      style={styles.background}
+    >
+      <LinearGradient colors={["#4c669f", "#3b5998", "#192f6a"]} style={styles.gradient}>
+        <Text style={styles.header}>My Data App</Text>
 
-      <View style={styles.buttonRow}>
-        <TouchableOpacity
-          style={[styles.button, styles.fetchButton]}
-          onPress={() => handleFetchData("posts")}
-        >
-          <Text style={styles.buttonText}>Posts</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.button, styles.fetchButton]}
-          onPress={() => handleFetchData("comments")}
-        >
-          <Text style={styles.buttonText}>Comment</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.button, styles.fetchButton]}
-          onPress={() => handleFetchData("users")}
-        >
-          <Text style={styles.buttonText}>Users</Text>
-        </TouchableOpacity>
-      </View>
+        <View style={styles.buttonRow}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => handleFetchData("posts")}
+          >
+            <Text style={styles.buttonText}>Posts</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => handleFetchData("comments")}
+          >
+            <Text style={styles.buttonText}>Comment</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => handleFetchData("users")}
+          >
+            <Text style={styles.buttonText}>Users</Text>
+          </TouchableOpacity>
+        </View>
 
-      <TouchableOpacity style={[styles.button, styles.deleteButton]} onPress={handleDeleteData}>
-        <Text style={styles.buttonText}>Delete Local Data</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteData}>
+          <Text style={styles.buttonText}>Delete Local Data</Text>
+        </TouchableOpacity>
 
-      <FlatList
-        data={data}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={styles.listContainer}
-        ListEmptyComponent={
-          <Text style={styles.emptyText}>No data available. Please fetch or refresh data.</Text>
-        }
-      />
-    </View>
+        <FlatList
+          data={data}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id.toString()}
+          contentContainerStyle={styles.listContainer}
+          ListEmptyComponent={
+            <Text style={styles.emptyText}>
+              No data available. Please fetch or refresh data.
+            </Text>
+          }
+        />
+      </LinearGradient>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  background: {
+    flex: 1,
+    resizeMode: "cover",
+  },
+  gradient: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#f9f9f9",
+    justifyContent: "center",
   },
   header: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 20,
-    color: "#333",
+    color: "#fff",
+    textShadowColor: "#000",
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 3,
   },
   buttonRow: {
     flexDirection: "row",
@@ -138,18 +160,29 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   button: {
-    padding: 10,
-    borderRadius: 5,
-    alignItems: "center",
-  },
-  fetchButton: {
-    backgroundColor: "#4CAF50",
     flex: 1,
+    backgroundColor: "#32CD32",
+    padding: 10,
     marginHorizontal: 5,
+    borderRadius: 25,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 3,
   },
   deleteButton: {
-    backgroundColor: "#FF6347",
+    backgroundColor: "#ff4500",
+    padding: 15,
+    borderRadius: 25,
+    alignItems: "center",
     marginBottom: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 3,
   },
   buttonText: {
     color: "#fff",
@@ -162,10 +195,10 @@ const styles = StyleSheet.create({
   itemContainer: {
     backgroundColor: "#fff",
     padding: 15,
-    borderRadius: 5,
+    borderRadius: 10,
     marginBottom: 10,
     shadowColor: "#000",
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.2,
     shadowRadius: 5,
     shadowOffset: { width: 0, height: 2 },
     elevation: 3,
@@ -183,7 +216,10 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 16,
     textAlign: "center",
-    color: "#aaa",
+    color: "#fff",
     marginTop: 50,
+    textShadowColor: "#000",
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 3,
   },
 });
